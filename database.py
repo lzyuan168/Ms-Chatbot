@@ -17,8 +17,7 @@ def add_data(user_id, reply, entity, value):
 
     
 
-    sql = "INSERT INTO user_reply (user_id, reply, entity, value)" \
-          "VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO user_reply (user_id, reply, entity, value) VALUES (%s, %s, %s, %s)"
     data = (user_id, reply, entity, value) ### prevent SQL Injection
           
     cursor.execute(sql, data) ### execute the SQL command
@@ -39,8 +38,7 @@ def read_data(user_id):
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
 
-    sql = "SELECT * FROM user_reply" \
-          "WHERE user_id = %s"
+    sql = "SELECT * FROM user_reply WHERE user_id = %s"
     data = (user_id,)
 
     cursor.execute(sql, data) 
@@ -69,9 +67,7 @@ def read_last_data(user_id):
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
     
-    sql = "SELECT * FROM user_reply" \
-          "WHERE user_id = %s" \
-          "ORDER BY id DESC LIMIT 1"
+    sql = "SELECT * FROM user_reply WHERE user_id = %s ORDER BY id DESC LIMIT 1"
     data = (user_id,)
 
     cursor.execute(sql, data)
@@ -97,9 +93,7 @@ def update_read(user_id, entity):
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
 
-    sql = "SELECT * FROM user_reply" \
-          "WHERE user_id = %s" \
-          "AND entity = %s"
+    sql = "SELECT * FROM user_reply WHERE user_id = %s AND entity = %s"
     data = (user_id, entity)
 
     cursor.execute(sql, data)
@@ -123,9 +117,7 @@ def update_data(user_id, reply_updated, value_updated, reply_original, entity):
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
 
-    sql = "UPDATE insurance.user_reply" \
-          "SET reply = %s, value = %s" \
-          "WHERE user_id = %s AND reply = %s AND entity = %s" 
+    sql = "UPDATE insurance.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s" 
     data = (reply_updated, value_updated, user_id, reply_original, entity)
 
     cursor.execute(sql, data)
@@ -148,9 +140,7 @@ def delete_data(user_id, reply, entity):
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
 
-    sql = "DELETE FROM user_reply" \
-          "WHERE reply = %s" \
-          "AND entity = %s"
+    sql = "DELETE FROM user_reply WHERE reply = %s AND entity = %s"
     data = (reply, entity)
 
     cursor.execute(sql, data)
