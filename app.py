@@ -4,6 +4,7 @@ from utils import wit_response
 from rest_api import Bot
 from database import *
 from parser_helper import *
+import json
 
 
 app = Flask(__name__)
@@ -74,6 +75,9 @@ def webhook():
 
                     log("Inside postback")
                     log(messaging_text)
+
+                    info = user_info(sender_ID)
+                    log(info)
 
                     ### handles the payload
                     bot_typing_on_off(sender_ID, "typing_on")
@@ -414,6 +418,13 @@ def bot_button_msg(sender_id, text, buttons):
     ### buttons are in json format
     bot.send_button_message(sender_id, text, buttons)
     return "ok", 200
+
+
+@app.route('/', methods=['GET'])
+def user_info(user_id):
+	fields = ["first_name", "last_name", "locale", "timezone", "is_payment_enabled"]
+	r = bot.get_user_info(user_id, fields)
+	return "ok", 200
 
 
 
