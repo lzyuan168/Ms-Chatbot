@@ -61,6 +61,9 @@ def webhook():
                     else:
                         messaging_text = 'no text'
 
+                    info = user_info(sender_ID)
+                    log(info)
+
                     ### responses to user intputs
                     bot_typing_on_off(sender_ID, "typing_on")
                     msg_list = wit_response(messaging_text)
@@ -212,12 +215,12 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
     confirm = confirmation_msg(data_list)
 
     def greeting_msg():
-        reply = "Hello there. Welcome to MoneySmart. I am here to help you" + \
+        reply = "Hello there. Welcome to MoneySmart.\nI am here to help you" + \
                 " get the best deal for Travel Insurance."
         return reply
 
     def travel_prompt():
-        text = "I'll need some details from you. For a start you may want" + \
+        text = "I'll need some details from you.\n\nFor a start you may want" + \
                 " to tell me if your departure city is Singapore?"
         buttons = [{"type":"postback",
                     "title":"Yes",

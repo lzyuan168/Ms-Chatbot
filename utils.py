@@ -18,10 +18,10 @@ def wit_response(message_text):
         resp_list.append([entity, value])
     
     return resp_list
-    #print(resp_list)
+    print(resp_list)
 
 
-#print(wit_response("i am going from singapore to france next week for 3 days with 2 adults and 2 children"))
+print(wit_response("i am going from singapore to france next week for 3 days with 2 adults and 2 children"))
 #print(wit_response("i am from singapore"))
 #print(wit_response("i am going japan"))
 #print(wit_response("i am going france next week"))
