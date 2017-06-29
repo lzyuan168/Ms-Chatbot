@@ -4,13 +4,17 @@ host = "localhost"
 user = "root"
 password = "root"
 database = "insurance"
+database_test = "insurance_test"
 
 
 ### function for adding data
-def add_data(user_id, reply, entity, value):    
+def add_data(user_id, reply, entity, value, *args):    
 
     ### open database connection
-    connection = MySQLdb.connect(host, user, password, database)
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
