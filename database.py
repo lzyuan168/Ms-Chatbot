@@ -34,10 +34,13 @@ def add_data(user_id, reply, entity, value, *args):
 
 
 ### function for reading data
-def read_data(user_id):
+def read_data(user_id, *args):
 
     ### open database connection
-    connection = MySQLdb.connect(host, user, password, database)
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -59,14 +62,17 @@ def read_data(user_id):
     #print(result_list)
     return result_list
 
-#read_data("1557189344293386")
+#read_data("user_123")
 
 
 ### function for getting the user last response
-def read_last_data(user_id):
+def read_last_data(user_id, *args):
 
     ### open database connection
-    connection = MySQLdb.connect(host, user, password, database)
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -89,10 +95,13 @@ def read_last_data(user_id):
 
 
 ### reading data for update
-def update_read(user_id, entity):
+def update_read(user_id, entity, *args):
 
     ### open database connection
-    connection = MySQLdb.connect(host, user, password, database)
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -113,16 +122,20 @@ def update_read(user_id, entity):
 
 
 ### updating the data in the table
-def update_data(user_id, reply_updated, value_updated, reply_original, entity):
+def update_data(user_id, reply_updated, value_updated, reply_original, entity, *args):
 
-    ### open database connecion
-    connection = MySQLdb.connect(host, user, password, database)
+    ### open database connection
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+        sql = "UPDATE insurance_test.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s"
+        data = (reply_updated, value_updated, user_id, reply_original, entity)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
+        sql = "UPDATE insurance.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s"
+        data = (reply_updated, value_updated, user_id, reply_original, entity)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
-
-    sql = "UPDATE insurance.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s" 
-    data = (reply_updated, value_updated, user_id, reply_original, entity)
 
     cursor.execute(sql, data)
     connection.commit()
@@ -135,11 +148,14 @@ def update_data(user_id, reply_updated, value_updated, reply_original, entity):
 #print("probably updated")
 
 
-### delete the data in the table
-def delete_data(user_id, reply, entity):
+### delete the selected data in the table
+def delete_data(user_id, reply, entity, *args):
 
     ### open database connection
-    connection = MySQLdb.connect(host, user, password, database)
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -151,3 +167,43 @@ def delete_data(user_id, reply, entity):
     connection.commit()
     cursor.close()
     connection.close()
+
+
+### delete everything from the table
+def delete_all(*args):
+
+    ### open database connection
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
+
+    ### prepare a cursor object using cursor() method
+    cursor = connection.cursor()
+
+    sql = "DELETE FROM user_reply"
+
+    cursor.execute(sql)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+### reset auto increment to 1
+def reset_auto_increment(*args):
+    ### open database connection
+    if "test":
+        connection = MySQLdb.connect(host, user, password, database_test)
+    else:
+        connection = MySQLdb.connect(host, user, password, database)
+
+    ### prepare a cursor object using cursor() method
+    cursor = connection.cursor()
+
+    sql = "ALTER TABLE user_reply AUTO_INCREMENT = 1"
+
+    cursor.execute(sql)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
