@@ -177,7 +177,8 @@ def payload_handler(sender_id, messaging_text):
 ### Helper Function ###
 #######################
 
-os.environ["DATABASE_NAME"] = "insurance"
+#os.environ["DATABASE_NAME"] = "insurance"
+### variable set in the command prompt instead
 
 def add_to_database(sender_id, msg_list):
 

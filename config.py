@@ -1,23 +1,23 @@
 import os
 
-#os.environ["DATABASE_NAME"] = "test"
+""" config the database connection """
 class Config():	
-
+    
+    ### if HOST_NAME is set, return HOST_NAME, else return default value localhost
 	def get_host():
-		os.environ["DB_HOST"] = "localhost"
-		return os.environ["DB_HOST"]
-
+		return os.environ.get("HOST_NAME", "localhost")
+    
+    ### if USER_NAME is set, return USER_NAME, else return default value root
 	def get_user():
-		os.environ["DB_USER"] = "root"
-		return os.environ["DB_USER"]
-
+		return os.environ.get("USER_NAME", "root")
+    
+    ### if PASSWORD_NAME is set, return PASSWORD_NAME, else return default value root
 	def get_password():
-		os.environ["DB_PASSWORD"] = "root"
-		return os.environ["DB_PASSWORD"]
-
+		return os.environ.get("PASSWORD_NAME", "root")
+    
+    ### if DATABASE_NAME is set, return DATABASE_NAME, else return default value insurance_test
 	def get_database():
-		database = os.environ.get("DATABASE_NAME", "insurance_test")
-		return database
+		return os.environ.get("DATABASE_NAME", "insurance_test")
 
 
 #print(Config.get_database())

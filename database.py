@@ -8,9 +8,7 @@ def add_data(user_id, reply, entity, value):
     connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
-    cursor = connection.cursor()
-
-    
+    cursor = connection.cursor()    
 
     sql = "INSERT INTO user_reply (user_id, reply, entity, value) VALUES (%s, %s, %s, %s)"
     data = (user_id, reply, entity, value) ### prevent SQL Injection
