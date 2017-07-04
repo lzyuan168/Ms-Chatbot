@@ -1,20 +1,11 @@
 import MySQLdb
-
-host = "localhost"
-user = "root"
-password = "root"
-database = "insurance"
-database_test = "insurance_test"
-
+from config import Config
 
 ### function for adding data
-def add_data(user_id, reply, entity, value, *args):    
+def add_data(user_id, reply, entity, value):    
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -34,13 +25,10 @@ def add_data(user_id, reply, entity, value, *args):
 
 
 ### function for reading data
-def read_data(user_id, *args):
+def read_data(user_id):
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -66,13 +54,10 @@ def read_data(user_id, *args):
 
 
 ### function for getting the user last response
-def read_last_data(user_id, *args):
+def read_last_data(user_id):
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -95,13 +80,10 @@ def read_last_data(user_id, *args):
 
 
 ### reading data for update
-def update_read(user_id, entity, *args):
+def update_read(user_id, entity):
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -122,20 +104,16 @@ def update_read(user_id, entity, *args):
 
 
 ### updating the data in the table
-def update_data(user_id, reply_updated, value_updated, reply_original, entity, *args):
+def update_data(user_id, reply_updated, value_updated, reply_original, entity):
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-        sql = "UPDATE insurance_test.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s"
-        data = (reply_updated, value_updated, user_id, reply_original, entity)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
-        sql = "UPDATE insurance.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s"
-        data = (reply_updated, value_updated, user_id, reply_original, entity)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
+
+    sql = "UPDATE {}.user_reply SET reply = %s, value = %s WHERE user_id = %s AND reply = %s AND entity = %s".format(Config.get_database())
+    data = (reply_updated, value_updated, user_id, reply_original, entity)
 
     cursor.execute(sql, data)
     connection.commit()
@@ -149,19 +127,16 @@ def update_data(user_id, reply_updated, value_updated, reply_original, entity, *
 
 
 ### delete the selected data in the table
-def delete_data(user_id, reply, entity, *args):
+def delete_data(user_id, reply, entity):
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
 
-    sql = "DELETE FROM user_reply WHERE reply = %s AND entity = %s"
-    data = (reply, entity)
+    sql = "DELETE FROM user_reply WHERE user_id = %s AND reply = %s AND entity = %s"
+    data = (user_id, reply, entity)
 
     cursor.execute(sql, data)
     connection.commit()
@@ -170,13 +145,10 @@ def delete_data(user_id, reply, entity, *args):
 
 
 ### delete everything from the table
-def delete_all(*args):
+def delete_all():
 
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()
@@ -190,12 +162,9 @@ def delete_all(*args):
 
 
 ### reset auto increment to 1
-def reset_auto_increment(*args):
+def reset_auto_increment():
     ### open database connection
-    if "test":
-        connection = MySQLdb.connect(host, user, password, database_test)
-    else:
-        connection = MySQLdb.connect(host, user, password, database)
+    connection = MySQLdb.connect(Config.get_host(), Config.get_user(), Config.get_password(), Config.get_database())
 
     ### prepare a cursor object using cursor() method
     cursor = connection.cursor()

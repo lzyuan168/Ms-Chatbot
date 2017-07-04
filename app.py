@@ -4,6 +4,7 @@ from utils import wit_response
 from rest_api import Bot
 from database import *
 from parser_helper import *
+from config import Config
 import json
 
 
@@ -126,7 +127,7 @@ def text_message_handling(sender_id, recipient_id, msg_list):
 
 
 def payload_handler(sender_id, messaging_text):
-
+    
     ### getting started and selecting type of travel insurance
     if messaging_text == "Get Started":
         reply = "Hello there. Welcome to MoneySmart.\nI am here to help you" + \
@@ -175,6 +176,8 @@ def payload_handler(sender_id, messaging_text):
 #######################
 ### Helper Function ###
 #######################
+
+os.environ["DATABASE_NAME"] = "insurance"
 
 def add_to_database(sender_id, msg_list):
 
@@ -366,7 +369,7 @@ def confirmation_msg(data_list):
 
         elif data[3] == "datetime":
             date = data[4][0:10]
-            date_msg = "You are going on {}".format(date)
+            date_msg = " You are going on {}".format(date)
 
         elif data[3] == "adults":
             parsed = msg_parser(data[2])
@@ -396,7 +399,7 @@ def confirmation_msg(data_list):
             elif number == '1':
                 children_msg = " and 1 child."
             else:
-                children_msg = " and {} {}".format(number, data[4])
+                children_msg = " and {} {}.".format(number, data[4])
 
     return(origin_msg + dest_msg + duration_msg + date_msg + adult_msg + children_msg)
 
@@ -425,9 +428,9 @@ def bot_button_msg(sender_id, text, buttons):
 
 @app.route('/', methods=['GET'])
 def user_info(user_id):
-	fields = ["first_name", "last_name", "locale", "timezone", "is_payment_enabled"]
-	r = bot.get_user_info(user_id, fields)
-	return "ok", 200
+    fields = ["first_name", "last_name", "locale", "timezone", "is_payment_enabled"]
+    r = bot.get_user_info(user_id, fields)
+    return "ok", 200
 
 
 
