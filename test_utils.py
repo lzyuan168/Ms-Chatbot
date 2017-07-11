@@ -2,7 +2,7 @@ import unittest
 from utils import wit_response
 
 
-""" Test the utils file """
+# Test the utils file
 class TestUtils(unittest.TestCase):
 
 	""" Description: Test wit_response to see if it correctly interpret the user input and output the correct entity, value pairs.

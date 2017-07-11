@@ -4,6 +4,7 @@ WIT_ACCESS_TOKEN = "GLRYCITZUVHT5S3MA6KPQWKMBKL25XI2"
 
 client = Wit(access_token = WIT_ACCESS_TOKEN)
 
+# returns a list of lists with the first item being the user input and subsequent items being the [entity, value] pairs
 def wit_response(message_text):
     user_input = client.message(message_text)
     entity = None
@@ -18,14 +19,3 @@ def wit_response(message_text):
         resp_list.append([entity, value])
     
     return resp_list
-    #print(resp_list)
-
-
-#print(wit_response("i am going from singapore to france next week for 3 days with 2 adults and 2 children"))
-#print(wit_response("i am from singapore"))
-#print(wit_response("i am going japan"))
-#print(wit_response("i am going france next week"))
-
-'''msg = "i am going from singapore to france next week for 3 days with 2 adults and 2 children"
-resp = client.message(msg)
-print(resp)'''
