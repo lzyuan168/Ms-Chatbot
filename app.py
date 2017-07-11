@@ -2,7 +2,7 @@ import os, sys
 from flask import Flask, request
 from utils import wit_response
 from rest_api import Bot
-from database import *
+from database_model import *
 from parser_helper import *
 from config import Config
 import json
@@ -114,10 +114,10 @@ def text_message_handling(sender_id, recipient_id, msg_list):
     add_to_database(sender_id, msg_list)
 
     # reading all data and adding to entity_list
-    entity_list = reading_data(sender_id)
+    entity_list = UserReply.reading_data(sender_id)
 
     # returns a single last(latest) user input
-    single_data = read_last_data(sender_id)
+    single_data = UserReply.read_last_data(sender_id)
 
     # check the intention of the user input and reply accordingly
     check_msg_intention(sender_id, recipient_id, single_data, entity_list, question_dict, entities)
@@ -153,13 +153,13 @@ def payload_handler(sender_id, messaging_text):
                    {"type":"postback",
                     "title":"No",
                     "payload":"No"}]
-        add_data(sender_id, "single trip insurance", "", "")
+        UserReply.add_data(sender_id, "single trip insurance", "", "")
         bot_button_msg(sender_id, text, buttons)
 
     # departure city checking
     elif messaging_text == "Yes":
         reply = str(question_dict.get('destination'))
-        add_data(sender_id, "from singapore", "origin", "singapore")
+        UserReply.add_data(sender_id, "from singapore", "origin", "singapore")
         bot_text_reply(sender_id, reply)        
 
     elif messaging_text == "No":
@@ -184,16 +184,16 @@ def add_to_database(sender_id, msg_list):
         for i in range(1, len(msg_list)):
             entity = msg_list[i][0]
             value = msg_list[i][1]
-            add_data(sender_id, user_reply, entity, value)
+            UserReply.add_data(sender_id, user_reply, entity, value)
     # else just add reply message
     else:
-        add_data(sender_id, user_reply, "", "")
+        UserReply.add_data(sender_id, user_reply, "", "")
 
 
 def reading_data(sender_id):
 
     # read all input from user
-    data_list = read_data(sender_id)
+    data_list = UserReply.read_data(sender_id)
     entity_list = []
 
     for lst in data_list:
@@ -208,7 +208,7 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
     reply_list = twoD_list[0]
     entity = reply_list[3]
     value = reply_list[4]
-    data_list = read_data(sender_id)
+    data_list = UserReply.read_data(sender_id)
     reply = ""
     confirm = confirmation_msg(data_list)
 
@@ -235,13 +235,13 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
         return reply
 
     def update_msg():
-        data = update_read(sender_id, entity)
+        data = UserReply.update_read(sender_id, entity)
         reply_original = data[0][2]
         reply_updated = reply_list[2]
         value_updated = reply_list[4]
 
-        delete_data(sender_id, reply_updated, entity)
-        update_data(sender_id, reply_updated, value_updated, reply_original, entity)
+        UserReply.delete_data(sender_id, reply_updated, entity)
+        UserReply.update_data(sender_id, reply_updated, value_updated, reply_original, entity)
 
         if entity == "datetime":
             reply = "You have updated your {} to {}".format(entity, value_updated[0:10])
@@ -305,9 +305,9 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
 
     # flexible input
     elif entity == "location":
-        bot_reply = read_last_data(recipient_id)
+        bot_reply = UserReply.read_last_data(recipient_id)
         if bot_reply[0][2] == question_dict.get('destination').lower():
-            add_data(sender_id, "going to {}".format(value), "destination", value)
+            UserReply.add_data(sender_id, "going to {}".format(value), "destination", value)
             reply = next_question()
         bot_text_reply(sender_id, reply)
 
