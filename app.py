@@ -114,7 +114,7 @@ def text_message_handling(sender_id, recipient_id, msg_list):
     add_to_database(sender_id, msg_list)
 
     # reading all data and adding to entity_list
-    entity_list = UserReply.reading_data(sender_id)
+    entity_list = reading_data(sender_id)
 
     # returns a single last(latest) user input
     single_data = UserReply.read_last_data(sender_id)
