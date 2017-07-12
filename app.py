@@ -197,7 +197,7 @@ def reading_data(sender_id):
     entity_list = []
 
     for lst in data_list:
-        entity_list.append(lst[3])
+        entity_list.append(lst[2])
 
     return entity_list
 
@@ -206,8 +206,8 @@ def reading_data(sender_id):
 def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, question_dict, entities):
 
     reply_list = twoD_list[0]
-    entity = reply_list[3]
-    value = reply_list[4]
+    entity = reply_list[2]
+    value = reply_list[3]
     data_list = UserReply.read_data(sender_id)
     reply = ""
     confirm = confirmation_msg(data_list)
@@ -236,9 +236,9 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
 
     def update_msg():
         data = UserReply.update_read(sender_id, entity)
-        reply_original = data[0][2]
-        reply_updated = reply_list[2]
-        value_updated = reply_list[4]
+        reply_original = data[0][1]
+        reply_updated = reply_list[1]
+        value_updated = reply_list[3]
 
         UserReply.delete_data(sender_id, reply_updated, entity)
         UserReply.update_data(sender_id, reply_updated, value_updated, reply_original, entity)
@@ -295,7 +295,7 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
         bot_text_reply(sender_id, reply)
 
     # travel insurance prompt
-    elif "travel insurance" in reply_list[2]:
+    elif "travel insurance" in reply_list[1]:
         travel_prompt()
 
     # if entity, value are missing. This is unknown message.
@@ -306,7 +306,7 @@ def check_msg_intention(sender_id, recipient_id, twoD_list, entity_list, questio
     # flexible input
     elif entity == "location":
         bot_reply = UserReply.read_last_data(recipient_id)
-        if bot_reply[0][2] == question_dict.get('destination').lower():
+        if bot_reply[0][1] == question_dict.get('destination').lower():
             UserReply.add_data(sender_id, "going to {}".format(value), "destination", value)
             reply = next_question()
         bot_text_reply(sender_id, reply)
@@ -345,25 +345,25 @@ def confirmation_msg(data_list):
     children_msg = ""
 
     for data in data_list:
-        if data[3] == "destination":
-            dest_msg = " to {}".format(data[4])
+        if data[2] == "destination":
+            dest_msg = " to {}".format(data[3])
 
-        elif data[3] == "duration":
-            parsed = msg_parser(data[2])
+        elif data[2] == "duration":
+            parsed = msg_parser(data[1])
             quantity = ""
             for item in parsed:
-                if item == data[4] or item == "a":
+                if item == data[3] or item == "a":
                     index = parsed.index(item)
                     quantity = parsed[(index+1)]
 
-            duration_msg = " for {} {}.".format(data[4], quantity)
+            duration_msg = " for {} {}.".format(data[3], quantity)
 
-        elif data[3] == "datetime":
-            date = data[4][0:10]
+        elif data[2] == "datetime":
+            date = data[3][0:10]
             date_msg = " You are going on {}".format(date)
 
-        elif data[3] == "adults":
-            parsed = msg_parser(data[2])
+        elif data[2] == "adults":
+            parsed = msg_parser(data[1])
             number = ""
             for item in parsed:
                 if item == "adults" or item == "adult":
@@ -374,10 +374,10 @@ def confirmation_msg(data_list):
             if number == '1':
                 adult_msg = " with a total of 1 adult"
             else:
-                adult_msg = " with a total of {} {}".format(number, data[4])
+                adult_msg = " with a total of {} {}".format(number, data[3])
 
-        elif data[3] == "children":
-            parsed = msg_parser(data[2])
+        elif data[2] == "children":
+            parsed = msg_parser(data[1])
             number = ""
             for item in parsed:
                 if item == "children" or item == "child":
@@ -390,7 +390,7 @@ def confirmation_msg(data_list):
             elif number == '1':
                 children_msg = " and 1 child."
             else:
-                children_msg = " and {} {}.".format(number, data[4])
+                children_msg = " and {} {}.".format(number, data[3])
 
     return(origin_msg + dest_msg + duration_msg + date_msg + adult_msg + children_msg)
 
