@@ -81,10 +81,11 @@ def webhook():
 
                     info = user_info(sender_ID)
                     log(info)
+                    first_name = info.get("first_name")
 
                     # handles the payload
                     bot_typing_on_off(sender_ID, "typing_on")
-                    payload_handler(sender_ID, messaging_text)
+                    payload_handler(sender_ID, messaging_text, first_name)
 
 
     return "ok", 200
@@ -123,11 +124,11 @@ def text_message_handling(sender_id, recipient_id, msg_list):
     check_msg_intention(sender_id, recipient_id, single_data, entity_list, question_dict, entities)
 
 
-def payload_handler(sender_id, messaging_text):
+def payload_handler(sender_id, messaging_text, first_name):
     
     # getting started and selecting type of travel insurance
     if messaging_text == "Get Started":
-        reply = "Hello there. Welcome to MoneySmart.\nI am here to help you" + \
+        reply = "Hello {}. Welcome to MoneySmart.\nI am here to help you".format(first_name) + \
                 " get the best deal for Travel Insurance."
 
         text = "Which type of Travel Insurance are you looking for?"
@@ -421,7 +422,7 @@ def bot_button_msg(sender_id, text, buttons):
 def user_info(user_id):
     fields = ["first_name", "last_name", "locale", "timezone", "is_payment_enabled"]
     r = bot.get_user_info(user_id, fields)
-    return "ok", 200
+    return r
 
 
 
