@@ -421,8 +421,8 @@ def bot_button_msg(sender_id, text, buttons):
 @app.route('/', methods=['GET'])
 def user_info(user_id):
     fields = ["first_name", "last_name", "locale", "timezone", "is_payment_enabled"]
-    r = bot.get_user_info(user_id, fields)
-    return r
+    output = bot.get_user_info(user_id, fields)
+    return output
 
 
 
