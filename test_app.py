@@ -43,9 +43,11 @@ class TestApp(unittest.TestCase):
         expected_single_data = [["test_user_1", "This is a test user reply", "sample entity 2", "sample value 2"]]
         self.assertEqual(test_single_data, expected_single_data)
         
+        mock_check_msg_intention = Mock()
+        recipient_id = "test_recipient"
         mock_check_msg_intention(sender_id, recipient_id, test_single_data, test_entity_list, question_dict, entities)
         # assert that mock_check_msg_intention is called with the given arguments
-        self.assertTrue((mock_check_msg_intention.call_args == ((sender_id, recipient_id, test_single_data, test_entity_list, question_dict, entities),)))
+        self.assertEqual(mock_check_msg_intention.call_args, ((sender_id, recipient_id, test_single_data, test_entity_list, question_dict, entities),))
 
 
     # To test if payload messages are being handled correctly when user clicked on a button
